@@ -104,10 +104,12 @@ article {
 
 .pie .columns {
   width: 100%;
+  
 }
 
-.pie .price {
-  text-align: right;
+.price {
+  padding-left: 60px;
+ 
 }
 
 .pie .columns .div {
