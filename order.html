@@ -6,6 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="site.css" type="text/css">
   <style>
+
+      @media only screen and (min-width: 768px) {
+          article {
+              width: 350px;
+          }
+      }
       .input-group{
           margin-bottom: 20px;
       }
@@ -59,7 +65,10 @@
             <p class="desc"></p>
         </div>
 
-        <form action="http://127.0.0.1:5501/api/post" method="POST">
+        <form action="http://localhost:5501/api/post" method="POST">
+            <input type="hidden" id="pie-order" name="pie-order">
+            <input type="hidden" id="location" name="location">
+
             <div class="input-group">
                 <div><label for="first-name">First name</label></div>
                 <div><input type="text" name="first-name" id="first-name"></div>
@@ -119,10 +128,32 @@
 <script>
     window.addEventListener("DOMContentLoaded", function(e) {
 
+        let locationBox = document.querySelector('#location');
+
+        let location = {
+            latitude: "unknown",
+            longitude: "unknown"
+        };
+
+        window.navigator.geolocation.getCurrentPosition (
+            function(position) {
+                location = {
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude
+                };
+                locationBox.value= JSON.stringify(location);
+            },
+            function(error) {
+                locationBox.value=JSON.stringify(location);
+            }
+        )
         const order = localStorage.getItem("order");
 
         if (order) {
             const pieOrder=JSON.parse(order);
+
+            const orderInput= document.querySelector("#pie-order");
+            orderInput.value=order;
 
             const pie=document.querySelector(".pie");
 
@@ -137,7 +168,7 @@
             const img =pie.querySelector("img");
 
             img.setAttribute("src", `images/${pieOrder.id}.png`)
-        }
-    })
+        };
+    });
 </script>
 </html>
